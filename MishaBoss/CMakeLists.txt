@@ -14,6 +14,9 @@ find_package(Qt6 6.5 REQUIRED COMPONENTS Qml Quick Core Widgets Network Concurre
 qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appMishaBoss
+
+    ViewWidget.h ViewWidget.cpp
+    SqlModel.h SqlModel.cpp
     main.cpp
 )
 
@@ -24,7 +27,10 @@ qt_add_qml_module(appMishaBoss
 
     QML_FILES
         Main.qml
-	RESOURCES res.qrc
+    SOURCES
+	SqlModel.h SqlModel.cpp
+    RESOURCES
+	res.qrc
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

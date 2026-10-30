@@ -11,7 +11,11 @@ ApplicationWindow  {
 	width: 640
 	height: 480
 
-	title: qsTr("Hello World")
+	title: qsTr("Misha is a Boss")
+
+	//onShow :
+
+	signal setTableSignal(tabName : string)
 
 
 	menuBar: MenuBar {
@@ -19,6 +23,11 @@ ApplicationWindow  {
 		Menu {
 			title: qsTr("&File")
 			Action { text: qsTr("&New...")}
+			Action {
+				text: qsTr("Load")
+				id : loadAct
+				onTriggered: mainWindow.setTableSignal("staff.db")
+			}
 			//Action { text: qsTr("&Open...") }
 			//Action { text: qsTr("&Save") }
 			//Action { text: qsTr("Save &As...") }
@@ -32,6 +41,11 @@ ApplicationWindow  {
 		}
 	}
 
+	onSetTableSignal : (string) => {
+						   sqlModel.lodDB(string)
+						   sqlModel.setTable(string)
+					   }
+
 	ScrollView {
 
 		id : main_view
@@ -43,7 +57,26 @@ ApplicationWindow  {
 			anchors.fill: parent
 			clip : true
 			interactive: true
+			visible : true
 
+			model: SqlModel {
+				required property string table
+
+				id : sqlModel
+				table: ""
+
+				function setTable(tableName) {
+					table = tableName;
+					console.log(tableName, "from qml")
+				}
+			}
+
+			delegate: Rectangle {
+				required property string modelData
+				height: 25
+				width: 100
+				Text { text: parent.modelData }
+			}
 		}
 	}
 }
