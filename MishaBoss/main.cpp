@@ -11,35 +11,31 @@ int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
 
-	auto db = QSqlDatabase::addDatabase("QSQLITE");
-	db.setDatabaseName("staff.db");
+	// auto db = QSqlDatabase::addDatabase("QSQLITE");
+	// db.setDatabaseName("staff.db");
 
-	if (!db.open() && db.lastError().isValid()) {
-		qInfo() << db.lastError();
-	} else {
-		db.open();
-		qInfo() << "Db opened";
-	}
+	// if (!db.open() && db.lastError().isValid()) {
+	// 	qInfo() << db.lastError();
+	// } else {
+	// 	db.open();
+	// 	qInfo() << "Db opened";
+	// }
 
-	auto tableList = db.tables();
+	// auto tableList = db.tables();
 
-	if (!tableList.empty()) {
-		//foreach (const auto& table, tableList) {
+	// if (!tableList.empty()) {
+	// 	qInfo() << tableList;
 
-		//}
+	// } else {
 
-		qInfo() << tableList;
+	// 	QApplication::quit();
+	// 	return 1;
+	// }
 
-	} else {
+	// ViewWidget wid(db);
+	// wid.show();
 
-		QApplication::quit();
-		return 1;
-	}
-
-	ViewWidget wid(tableList.at(0));
-	wid.show();
-
-
+//	db.close();
 
 	QQmlApplicationEngine engine;
 	QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, qApp,

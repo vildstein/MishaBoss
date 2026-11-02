@@ -8,15 +8,15 @@ ApplicationWindow  {
 
 	visible: true
 
-	width: 640
+	width: 840
 	height: 480
+
+	minimumWidth: 200
+	minimumHeight: 400
 
 	title: qsTr("Misha is a Boss")
 
-	//onShow :
-
 	signal setTableSignal(tabName : string)
-
 
 	menuBar: MenuBar {
 
@@ -26,11 +26,16 @@ ApplicationWindow  {
 			Action {
 				text: qsTr("Load")
 				id : loadAct
-				onTriggered: mainWindow.setTableSignal("staff.db")
+				onTriggered: dbReader.tryToConnect("staff.db")
 			}
 			//Action { text: qsTr("&Open...") }
 			//Action { text: qsTr("&Save") }
 			//Action { text: qsTr("Save &As...") }
+			Action { text: qsTr("Add Ridgt")
+					onTriggered: {
+						rightNames.append({someNames :"Iron Maiden"});
+					}
+			}
 			MenuSeparator { }
 
 			Action {
@@ -41,42 +46,174 @@ ApplicationWindow  {
 		}
 	}
 
-	onSetTableSignal : (string) => {
-						   sqlModel.lodDB(string)
-						   sqlModel.setTable(string)
-					   }
+//	onSetTableSignal : (string) => {
+//						   sqlModel.loadDB(string)
+//						   sqlModel.setTable(string)
+//					   }
 
-	ScrollView {
+	SqlConnect {
+		id : dbReader
+//		required property string tableName
+	}
 
-		id : main_view
+	SplitView {
+		id: centerWidget
 		anchors.fill: parent
 
-		TableView {
+		Frame {
+			id : lefWidget
+			//anchors.fill: parent
+			//anchors.margins: 15
+			SplitView.minimumWidth: 125
+			SplitView.preferredWidth: 350
+			SplitView.maximumWidth: 700
 
-			id : dataBaseView
-			anchors.fill: parent
-			clip : true
-			interactive: true
-			visible : true
+			background: Rectangle {
+				id : backGround
+				anchors.fill: parent
+				color: "#0F1821"
+			}
 
-			model: SqlModel {
-				required property string table
+			ScrollView {
+				id: mainView
+				anchors.fill: parent
+				ScrollBar.vertical.policy: ScrollBar.AlwaysOn
 
-				id : sqlModel
-				table: ""
+				ListModel {
+					id: tableNames
 
-				function setTable(tableName) {
-					table = tableName;
-					console.log(tableName, "from qml")
+				}
+
+				Connections {
+					target: dbReader
+					function onTableReaded (tableName) {
+						tableNames.append({tableName})
+						console.log("table name =", tableName)
+					}
+				}
+
+				ListView {
+					id : listView
+					anchors.fill: parent
+					spacing: 5
+					model: tableNames
+
+					delegate: DbNameItem {
+						//tableName : ""
+						id : frameDelegate
+					}
+					clip: true
+				}
+			}
+		}
+
+		Frame {
+			id : rightWidget
+
+			ListModel {
+				id: rightNames
+
+				ListElement {
+					someNames: "Alice"
+				}
+
+				ListElement {
+					someNames: "Cooper"
 				}
 			}
 
-			delegate: Rectangle {
-				required property string modelData
-				height: 25
-				width: 100
-				Text { text: parent.modelData }
+			Component {
+
+				id : rightNameDelegate
+
+				Rectangle {
+					id : insideRect
+					required property string someNames
+
+					//id : rightNameDelegate
+					border.color: "#29465D"
+					border.width: 2
+					radius: 5
+					color: "#111C24"//"#0F1821"
+					width: rightWidget.width - 30
+					//anchors.left: rightListView.left
+					height: 40
+
+					Text {
+
+						anchors.verticalCenter: parent.verticalCenter
+						anchors.left: parent.left
+						//anchors.left: parent.right
+						anchors.leftMargin: 15
+						font.family: "Inter"
+						font.pointSize: 24
+						color: "#DAECFA"
+						text: someNames
+					}
+
+					MouseArea {
+						anchors.fill: parent
+						hoverEnabled: true
+						onEntered: {
+							insideRect.color = "#1993E7"
+						}
+						onExited: {
+							insideRect.color = "#111C24"
+						}
+					}
+				}
+			}
+
+			ListView {
+				id : rightListView
+				anchors.fill: parent
+				spacing: 10
+				model: rightNames
+				delegate: rightNameDelegate
+				clip: true
 			}
 		}
 	}
 }
+
+
+//background: "#0F1821"
+// SqlModel {
+// 	//required property string table
+// 	id : sqlModel
+// 	//table: ""
+// 	function setTable(tableName) {
+// 		table = tableName;
+// 		console.log(tableName, "from qml")
+// 	}
+// }
+
+// TableView {
+
+// 	id : dataBaseView
+// 	anchors.fill: parent
+// 	clip : true
+// 	interactive: true
+// 	visible : true
+
+// 	model: SqlModel {
+// 		required property string table
+
+// 		id : sqlModel
+// 		table: ""
+
+// 		function setTable(tableName) {
+// 			table = tableName;
+// 			console.log(tableName, "from qml")
+// 		}
+// 	}
+
+// 	delegate: Rectangle {
+// 		required property string modelData
+// 		height: 25
+// 		width: 100
+// 		Text {
+// 			text: parent.modelData
+// 		}
+// 	}
+// }

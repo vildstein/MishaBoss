@@ -17,6 +17,7 @@ qt_add_executable(appMishaBoss
 
     ViewWidget.h ViewWidget.cpp
     SqlModel.h SqlModel.cpp
+    SqlConnect.h SqlConnect.cpp
     main.cpp
 )
 
@@ -27,8 +28,10 @@ qt_add_qml_module(appMishaBoss
 
     QML_FILES
         Main.qml
+	DbNameItem.qml
     SOURCES
 	SqlModel.h SqlModel.cpp
+	SqlConnect.h SqlConnect.cpp
     RESOURCES
 	res.qrc
 )
