@@ -46,14 +46,8 @@ ApplicationWindow  {
 		}
 	}
 
-//	onSetTableSignal : (string) => {
-//						   sqlModel.loadDB(string)
-//						   sqlModel.setTable(string)
-//					   }
-
 	SqlConnect {
 		id : dbReader
-//		required property string tableName
 	}
 
 	SplitView {
@@ -62,8 +56,7 @@ ApplicationWindow  {
 
 		Frame {
 			id : lefWidget
-			//anchors.fill: parent
-			//anchors.margins: 15
+
 			SplitView.minimumWidth: 125
 			SplitView.preferredWidth: 350
 			SplitView.maximumWidth: 700
@@ -88,7 +81,6 @@ ApplicationWindow  {
 					target: dbReader
 					function onTableReaded (tableName) {
 						tableNames.append({tableName})
-						console.log("table name =", tableName)
 					}
 				}
 
@@ -99,7 +91,6 @@ ApplicationWindow  {
 					model: tableNames
 
 					delegate: DbNameItem {
-						//tableName : ""
 						id : frameDelegate
 					}
 					clip: true
@@ -130,20 +121,17 @@ ApplicationWindow  {
 					id : insideRect
 					required property string someNames
 
-					//id : rightNameDelegate
 					border.color: "#29465D"
 					border.width: 2
 					radius: 5
 					color: "#111C24"//"#0F1821"
 					width: rightWidget.width - 30
-					//anchors.left: rightListView.left
 					height: 40
 
 					Text {
 
 						anchors.verticalCenter: parent.verticalCenter
 						anchors.left: parent.left
-						//anchors.left: parent.right
 						anchors.leftMargin: 15
 						font.family: "Inter"
 						font.pointSize: 24
@@ -175,45 +163,3 @@ ApplicationWindow  {
 		}
 	}
 }
-
-
-//background: "#0F1821"
-// SqlModel {
-// 	//required property string table
-// 	id : sqlModel
-// 	//table: ""
-// 	function setTable(tableName) {
-// 		table = tableName;
-// 		console.log(tableName, "from qml")
-// 	}
-// }
-
-// TableView {
-
-// 	id : dataBaseView
-// 	anchors.fill: parent
-// 	clip : true
-// 	interactive: true
-// 	visible : true
-
-// 	model: SqlModel {
-// 		required property string table
-
-// 		id : sqlModel
-// 		table: ""
-
-// 		function setTable(tableName) {
-// 			table = tableName;
-// 			console.log(tableName, "from qml")
-// 		}
-// 	}
-
-// 	delegate: Rectangle {
-// 		required property string modelData
-// 		height: 25
-// 		width: 100
-// 		Text {
-// 			text: parent.modelData
-// 		}
-// 	}
-// }
